@@ -1,0 +1,42 @@
+server:
+  port: 80
+  error:
+    whitelabel:
+      enabled: false
+    path: /error.do
+
+mybatis:
+  type-aliases-package: com.**.dto
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  devtools:
+    livereload:
+      enabled: true
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    check-template-location: true
+  web:
+    resources:
+      static-locations: classpath:/static/
+  config:
+    additional-location: classpath:service.yml
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/developerweb
+    driver-class-name: org.postgresql.Driver
+    username: yunwoosang
+    password: 1234
+file:
+  upload-path: /Users/your-username/uploads

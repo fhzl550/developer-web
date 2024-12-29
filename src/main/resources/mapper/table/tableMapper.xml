@@ -1,0 +1,60 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.developerweb.core.allTable.dao.TableDao">
+
+    <sql id="tableColumn">
+        tables_name,
+        tables_position,
+        tables_office,
+        tables_age,
+        tables_start_date,
+        tables_salary,
+        file_name,
+        file_path,
+        file_size,
+        orfile_name
+    </sql>
+
+    <!-- 페이지 네이션 -->
+    <select id="getPageNation" parameterType="com.example.developerweb.core.allTable.dto.PageDto"
+            resultType="com.example.developerweb.core.allTable.dto.TableDto">
+        select *
+        from developer_web_tables
+        where 1=1
+        <if test="searchKey != null and searchKey.trim() != ''">
+            and tables_name like '%' || #{searchKey} || '%'
+        </if>
+        order by tables_start_date
+        limit #{pageSize} offset #{offset}
+    </select>
+
+    <!-- 전체 페이지 출력 -->
+    <select id="getAllTable" parameterType="com.example.developerweb.core.allTable.dto.PageDto"
+            resultType="Integer">
+        select count(*) as totalCount
+        from developer_web_tables
+        where 1=1
+        <if test="searchKey != null and searchKey.trim() != ''">
+            and tables_name like '%' || #{searchKey} || '%'
+        </if>
+    </select>
+
+    <insert id="tableRegister" parameterType="com.example.developerweb.core.allTable.dto.TableDto">
+        insert into developer_web_tables (
+            <include refid="tableColumn"/>
+        ) values (
+            #{tablesName},
+            #{tablesPosition},
+            #{tablesOffice},
+            #{tablesAge},
+            #{tablesStartDate},
+            #{tablesSalary},
+            #{fileRequest.fileName},
+            #{fileRequest.filePath},
+            #{fileRequest.fileSize},
+            #{fileRequest.orFileName},
+        )
+    </insert>
+</mapper>
