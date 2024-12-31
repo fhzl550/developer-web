@@ -13,7 +13,7 @@ public class FileRequest {
     private String orFileName;                  //오리지널 파일명
 
     @Builder
-    public FileRequest(String orFileName, String fileName, int fileSize,String filePath) {
+    public FileRequest(String orFileName, String fileName, int fileSize, String filePath) {
         this.orFileName = orFileName;
         this.fileName = fileName;
         this.fileSize = fileSize;

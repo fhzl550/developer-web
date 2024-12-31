@@ -47,13 +47,13 @@ public class TableController {
 
         return tableService.getTablesService(page, pageSize, searchKey);
     }
-
     @ResponseBody
     @PostMapping("/register")
     public int registerTable(@RequestPart("reqDs") TableDto req,
                              @RequestPart("fileRequest") MultipartFile file) {
         log.info("테이블 업로드: {}", req.toString());
         log.info("파일 업로드: {}", file.getOriginalFilename());
-        return 0;
+        return tableService.registerTable(req, file);
     }
+
 }

@@ -50,7 +50,7 @@ public class FileUtil {
         //업로드 파일명
         String saveFile = file.getOriginalFilename() + "_" + date;
         //filepath 경로 : service.propertise + 파일 업로드 시 서브 패스 + 파일 이름
-        String filePath = Paths.get(uploadPath, subPath, saveFile).toString();
+        String filePath = Paths.get(uploadService, subPath, saveFile).toString();
         // filePath의 경로에 파일 저장 경로를 생성하기 위해 사용
         File fileUpload = new File(filePath);
 

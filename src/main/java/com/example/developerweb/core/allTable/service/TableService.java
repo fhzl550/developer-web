@@ -54,14 +54,7 @@ public class TableService {
     }
 
     public int registerTable(TableDto tableDto, MultipartFile file) {
-        if (!file.isEmpty()) {
-            //fileUtill 에 담겨져 있는 정보를 가져와서 FileRequest 타입의 fileRequest 로 세팅
-            FileRequest fileRequest = fileUtil.uploadFile(file, "table");
-            //TableDto에 있는 fileRequest 매핑
-            tableDto.setFileRequest(fileRequest);
-        } else {
-            return 0;
-        }
+        FileRequest fileRequest = fileUtil.uploadFile(file, "table");
         return tableDao.getTableInsert(tableDto, file);
     }
 }
