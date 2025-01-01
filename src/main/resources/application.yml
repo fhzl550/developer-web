@@ -39,4 +39,4 @@ spring:
     username: yunwoosang
     password: 1234
 file:
-  upload-path: /Users/your-username/uploads
+  upload-path: /Users/yun-usang/uploads

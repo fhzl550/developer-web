@@ -27,5 +27,5 @@ public interface TableDao {
     public Integer getAllTable(@Param("searchKey") String searchKey);
 
     //페이지 등록
-    public int getTableInsert(TableDto tableDto, MultipartFile file);
+    public int getTableInsert(TableDto tableDto);
 }

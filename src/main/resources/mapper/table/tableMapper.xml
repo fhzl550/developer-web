@@ -41,7 +41,7 @@
         </if>
     </select>
 
-    <insert id="tableRegister" parameterType="com.example.developerweb.core.allTable.dto.TableDto">
+    <insert id="getTableInsert" parameterType="com.example.developerweb.core.allTable.dto.TableDto">
         insert into developer_web_tables (
             <include refid="tableColumn"/>
         ) values (
@@ -54,7 +54,7 @@
             #{fileRequest.fileName},
             #{fileRequest.filePath},
             #{fileRequest.fileSize},
-            #{fileRequest.orFileName},
+            #{fileRequest.orFileName}
         )
     </insert>
 </mapper>

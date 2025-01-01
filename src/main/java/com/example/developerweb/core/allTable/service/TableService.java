@@ -55,6 +55,7 @@ public class TableService {
 
     public int registerTable(TableDto tableDto, MultipartFile file) {
         FileRequest fileRequest = fileUtil.uploadFile(file, "table");
-        return tableDao.getTableInsert(tableDto, file);
+        tableDto.setFileRequest(fileRequest);
+        return tableDao.getTableInsert(tableDto);
     }
 }

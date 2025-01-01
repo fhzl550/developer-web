@@ -51,8 +51,6 @@ public class TableController {
     @PostMapping("/register")
     public int registerTable(@RequestPart("reqDs") TableDto req,
                              @RequestPart("fileRequest") MultipartFile file) {
-        log.info("테이블 업로드: {}", req.toString());
-        log.info("파일 업로드: {}", file.getOriginalFilename());
         return tableService.registerTable(req, file);
     }
 

@@ -14,5 +14,5 @@ public class TableDto {
     private int tablesAge;                      //담당자 나이
     private Timestamp tablesStartDate;          //담당자 입사 날짜
     private int tablesSalary;                   //담당자
-    /*private FileRequest fileRequest;*/            //파일 정보 객체
+    private FileRequest fileRequest;            //파일 정보 객체
 }
