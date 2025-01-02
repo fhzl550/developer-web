@@ -51,6 +51,7 @@ public class TableController {
     @PostMapping("/register")
     public int registerTable(@RequestPart("reqDs") TableDto req,
                              @RequestPart("fileRequest") MultipartFile file) {
+        log.info("date:{}",req.getTablesStartDate());
         return tableService.registerTable(req, file);
     }
 

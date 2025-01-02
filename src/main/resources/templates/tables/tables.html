@@ -49,7 +49,7 @@ function loadTableData(page, search) {
             var tableList = '';
             for (var i = 0; i < response.items.length; i++) {
                 const startDay = response.items[i].tablesStartDate.substring(0, 10); // 날짜 형식 처리
-                tableList += '<tr>';
+                tableList += '<tr class="tableDtl" data-seq="'+response.items[i].tablesSeq+'">';
                 tableList += '<td class="names">' + response.items[i].tablesName + '</td>';
                 tableList += '<td>' + response.items[i].tablesPosition + '</td>';
                 tableList += '<td>' + response.items[i].tablesOffice + '</td>';
@@ -59,6 +59,11 @@ function loadTableData(page, search) {
                 tableList += '</tr>';
             }
             $('#tableResult').html(tableList);
+
+            //상세보기 ajax
+            $('.tableDtl').on('click', function () {
+                alert("data-seq:"+$(this).data('seq'));
+            });
 
             // 페이지네이션 버튼 렌더링
             renderPagination(response.pageInfo);
@@ -89,8 +94,6 @@ function register() {
     var formData = new FormData();
     var file = $('#uploadFile')[0].files[0];
 
-    console.table(file)
-
     //javascript 객체
     var reqDs = {
         tablesName: $('#managerNm').val(),
@@ -115,9 +118,22 @@ function register() {
        return response.json();
     }).then(data => {
         console.log("업로드 성공",data);
+        location.href="/tables/table";
     }).catch(error => {
         console.error("업로드 실패", error);
     });
+}
+
+function updateFileName() {
+    const fileInput = document.getElementById('uploadFile');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+    // 파일이 선택되었는지 확인
+    if (fileInput.files.length > 0) {
+        fileNameDisplay.value = fileInput.files[0].name; // 첫 번째 파일 이름을 설정
+    } else {
+        fileNameDisplay.value = ""; // 파일 선택이 취소된 경우 초기화
+    }
 }
 
 </script>
@@ -600,7 +616,7 @@ function register() {
                         </div>
                         <div class="form-group">
                             <label for="joinDate">입사날짜</label>
-                            <input type="text" class="form-control" id="joinDate" placeholder="Enter data">
+                            <input type="date" class="form-control" id="joinDate" placeholder="Enter data">
                         </div>
                         <div class="form-group">
                             <label for="salary">연봉</label>
@@ -610,7 +626,7 @@ function register() {
                             <label for="uploadFile">파일</label>
                             <div class="input-group">
                                 <!-- 숨겨진 파일 입력 필드 -->
-                                <input type="file" class="custom-file-input" id="uploadFile" style="display:none;">
+                                <input type="file" class="custom-file-input" id="uploadFile" style="display:none;" onchange="updateFileName()">
                                 <!-- 파일명 표시 필드 -->
                                 <input type="text" class="form-control bg-white" id="fileNameDisplay" placeholder="파일을 선택하세요..." readonly>
                                 <!-- 선택 버튼 -->
@@ -631,6 +647,52 @@ function register() {
         </div>
     </div>
     <!-- popup end -->
+
+    <!-- 상세보기 팝업 start -->
+    <!-- 모달 팝업 -->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="detailModalLabel">상세보기</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- 상세 데이터 표시 -->
+                    <div class="form-group">
+                        <label for="detailName">이름</label>
+                        <input type="text" class="form-control" id="detailName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailPosition">포지션</label>
+                        <input type="text" class="form-control" id="detailPosition" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailOffice">주소</label>
+                        <input type="text" class="form-control" id="detailOffice" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailAge">나이</label>
+                        <input type="text" class="form-control" id="detailAge" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailDate">입사날짜</label>
+                        <input type="text" class="form-control" id="detailDate" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailSalary">연봉</label>
+                        <input type="text" class="form-control" id="detailSalary" readonly>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 상세보기 팝업 end -->
 
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>

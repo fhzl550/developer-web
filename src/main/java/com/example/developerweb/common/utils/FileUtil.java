@@ -21,25 +21,7 @@ public class FileUtil {
     @Value("${file.upload-path}")
     private String uploadService;
 
-
-    /* service.propertise에 기본 경로 저장 */
-    private String uploadPath;
-
-    @PostConstruct
-    public void init() {
-        // 유효성 검사
-        if (uploadService == null || uploadService.isEmpty()) {
-            throw new IllegalArgumentException("file.upload-path 설정이 누락되었습니다.");
-        }
-
-        // 경로 설정
-        uploadPath = Paths.get(uploadService).toString();
-
-        log.info("파일 업로드 경로: {}", uploadPath);
-    }
-
-    //중복 파일명 방지
-    //TODO : UUID 를 사용하고 나서는 DB 에 파일이름,파일경로,파일크기, 파일 원본 이름이 안넘어감
+    //중복 파일명 방지 파일명 변경 하고 업로드
     public static String uniqueFileName(String originalFilename) {
         int doIndex = originalFilename.lastIndexOf(".");                    //파일확장자 앞에 이름의 개수를 추출
         String baseName = originalFilename.substring(0, doIndex);               //파일 이름만 추출
@@ -49,9 +31,6 @@ public class FileUtil {
         return baseName + "_" + uuId + extension;
     }
 
-    LocalDate now = LocalDate.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    String date = now.format(formatter);
     /*
     * 단일 파일 업로드
     * @param multipartFile - 파일 객체
@@ -61,17 +40,12 @@ public class FileUtil {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("업로드된 파일이 없습니다.");
         }
-        //MultipartFile 형식의 파일 확장자 구하기
-        String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+
         //Mac 에서 파일의 원본 이름 구하기(윈도우와 맥의 한글 처리 방식이 다름)
         String originFilename = Normalizer.normalize(file.getOriginalFilename(), Normalizer.Form.NFC);
-        //파일 이름에서 "."만 띄어낸 숫자를 구함
-        int indexOf = originFilename.lastIndexOf(".");
-        //파일의 이름만 구하기
-        String fileNm = originFilename.substring(0, indexOf);
 
         //업로드 파일명
-        String saveFile = fileNm + "_" + date + "." + fileExtension;
+        String saveFile =uniqueFileName(originFilename);
         //filepath 경로 : service.propertise + 파일 업로드 시 서브 패스 + 파일 이름
         String filePath = Paths.get(uploadService, subPath, saveFile).toString();
         // filePath의 경로에 파일 저장 경로를 생성하기 위해 사용
@@ -87,7 +61,7 @@ public class FileUtil {
         }
         //FileReqeust Dto로 반환 / Builder 패턴
         return FileRequest.builder()
-                .orFileName(file.getOriginalFilename())
+                .orFileName(originFilename)
                 .fileName(saveFile)
                 .filePath(filePath)
                 .fileSize((int) file.getSize())

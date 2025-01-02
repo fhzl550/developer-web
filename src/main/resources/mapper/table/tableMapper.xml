@@ -26,11 +26,11 @@
         <if test="searchKey != null and searchKey.trim() != ''">
             and tables_name like '%' || #{searchKey} || '%'
         </if>
-        order by tables_start_date
+        order by tables_seq desc
         limit #{pageSize} offset #{offset}
     </select>
 
-    <!-- 전체 페이지 출력 -->
+    <!-- 전체 페이지 개수 출력 -->
     <select id="getAllTable" parameterType="com.example.developerweb.core.allTable.dto.PageDto"
             resultType="Integer">
         select count(*) as totalCount
