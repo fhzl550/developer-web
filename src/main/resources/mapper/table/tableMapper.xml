@@ -66,4 +66,17 @@
         where
             tables_seq = #{tablesSeq}
     </select>
+
+    <select id="getFileDetail" resultType="com.example.developerweb.common.dto.FileRequest">
+        SELECT
+            file_name AS fileName,
+            file_path AS filePath,
+            file_size AS fileSize,
+            orfile_name AS orFileName
+        FROM
+            developer_web_tables
+        WHERE
+            tables_seq = #{tablesSeq}
+    </select>
+
 </mapper>

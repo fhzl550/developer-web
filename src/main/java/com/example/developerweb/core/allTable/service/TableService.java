@@ -59,7 +59,13 @@ public class TableService {
         return tableDao.getTableInsert(tableDto);
     }
 
-    public List<TableDto> getDetail(int seq) {
-        return tableDao.getTableDetail(seq);
+    //TODO : [25.01.05]파일 보여주는 부분 확실하게 공부하기 특히 어떻게 가져와서 어떻게 변환 했는지를 중점으로 공부히기
+    public TableDto getDetail(int seq) {
+        TableDto tableDto = tableDao.getTableDetail(seq);
+        FileRequest fileRequest = tableDao.getFileDetail(seq);
+        if(fileRequest != null) {
+            tableDto.setFileRequest(fileRequest);
+        }
+        return tableDto;
     }
 }

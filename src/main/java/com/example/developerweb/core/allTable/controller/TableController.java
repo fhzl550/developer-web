@@ -57,7 +57,7 @@ public class TableController {
 
     @ResponseBody
     @PostMapping("/detail")
-    public List<TableDto> detailTable(@RequestBody Map<String, Object> reqDs) {
+    public TableDto detailTable(@RequestBody Map<String, Object> reqDs) {
         int seq = (Integer) reqDs.get("tablesSeq");
         return tableService.getDetail(seq);
     }

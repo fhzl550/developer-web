@@ -138,18 +138,13 @@ function tableDtl(unique) {
     }
 
     doActionAjax('POST', '/tables/detail', seq, function (resDs) {
-        console.table(resDs)
-
-        for (var i=0; i<resDs.length; i++) {
-            console.log("tablesPosition:", resDs[i].tablesPosition);
-            $('#detailName').val(resDs[i].tablesName);
-            $('#detailPosition').val(resDs[i].tablesPosition);
-            $('#detailOffice').val(resDs[i].tablesOffice);
-            $('#detailAge').val(resDs[i].tablesAge);
-            $('#detailDate').val(resDs[i].tablesStartDate.substring(0, 10));// 날짜 형식 처리
-            $('#detailSalary').val(resDs[i].tablesSalary);
-            $('#detailFile').val();
-        }
+        $('#detailName').val(resDs.tablesName);
+        $('#detailPosition').val(resDs.tablesPosition);
+        $('#detailOffice').val(resDs.tablesOffice);
+        $('#detailAge').val(resDs.tablesAge);
+        $('#detailDate').val(resDs.tablesStartDate.substring(0, 10));// 날짜 형식 처리
+        $('#detailSalary').val(resDs.tablesSalary);
+        $('#detailFile').val(resDs.fileRequest.orFileName);
     });
 
     $('#detailModal').modal('show');

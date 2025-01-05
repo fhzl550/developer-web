@@ -1,5 +1,6 @@
 package com.example.developerweb.core.allTable.dao;
 
+import com.example.developerweb.common.dto.FileRequest;
 import com.example.developerweb.core.allTable.dto.TableDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -30,5 +31,7 @@ public interface TableDao {
     public int getTableInsert(TableDto tableDto);
 
     //페이지 상세보기
-    public List<TableDto> getTableDetail(@Param("tablesSeq") int seq);
+    public TableDto getTableDetail(@Param("tablesSeq") int seq);
+
+    public FileRequest getFileDetail(@Param("tablesSeq") int seq);
 }
