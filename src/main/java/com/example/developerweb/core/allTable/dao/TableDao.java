@@ -28,4 +28,7 @@ public interface TableDao {
 
     //페이지 등록
     public int getTableInsert(TableDto tableDto);
+
+    //페이지 상세보기
+    public List<TableDto> getTableDetail(@Param("tablesSeq") int seq);
 }

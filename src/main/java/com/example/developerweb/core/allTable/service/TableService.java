@@ -58,4 +58,8 @@ public class TableService {
         tableDto.setFileRequest(fileRequest);
         return tableDao.getTableInsert(tableDto);
     }
+
+    public List<TableDto> getDetail(int seq) {
+        return tableDao.getTableDetail(seq);
+    }
 }

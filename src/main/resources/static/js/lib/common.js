@@ -4,7 +4,6 @@
 //3. Return Type : void
 //****************************************************************************************************
 function doActionAjax(type, url, param, callBack, errorCallBack) {
-
     $.ajax({
         type : type,
         url : url,

@@ -57,4 +57,13 @@
             #{fileRequest.orFileName}
         )
     </insert>
+
+    <select id="getTableDetail" parameterType="int"
+            resultType="com.example.developerweb.core.allTable.dto.TableDto">
+        select *
+        from
+            developer_web_tables
+        where
+            tables_seq = #{tablesSeq}
+    </select>
 </mapper>

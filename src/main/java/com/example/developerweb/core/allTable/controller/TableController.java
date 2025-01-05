@@ -47,12 +47,19 @@ public class TableController {
 
         return tableService.getTablesService(page, pageSize, searchKey);
     }
+
     @ResponseBody
     @PostMapping("/register")
     public int registerTable(@RequestPart("reqDs") TableDto req,
                              @RequestPart("fileRequest") MultipartFile file) {
-        log.info("date:{}",req.getTablesStartDate());
         return tableService.registerTable(req, file);
+    }
+
+    @ResponseBody
+    @PostMapping("/detail")
+    public List<TableDto> detailTable(@RequestBody Map<String, Object> reqDs) {
+        int seq = (Integer) reqDs.get("tablesSeq");
+        return tableService.getDetail(seq);
     }
 
 }
