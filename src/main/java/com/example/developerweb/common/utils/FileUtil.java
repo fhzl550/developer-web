@@ -1,25 +1,28 @@
 package com.example.developerweb.common.utils;
 
 import com.example.developerweb.common.dto.FileRequest;
-import jakarta.annotation.PostConstruct;
+import com.example.developerweb.core.allTable.dao.TableDao;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.text.Normalizer;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Slf4j
 @Component
 public class FileUtil {
+    private final TableDao tableDao;
     @Value("${file.upload-path}")
     private String uploadService;
+
+    public FileUtil(TableDao tableDao) {
+        this.tableDao = tableDao;
+    }
 
     //중복 파일명 방지 파일명 변경 하고 업로드
     public static String uniqueFileName(String originalFilename) {
@@ -66,5 +69,42 @@ public class FileUtil {
                 .filePath(filePath)
                 .fileSize((int) file.getSize())
                 .build();
+    }
+
+    /**************************************************
+     * [메서드 이름]: deleteTable
+     * - 역할: 파일 삭제 로직 처리
+     * - 작성자: Yun Usang
+     * - 작성일: 2025-01-18
+     * - 메모 : 반환 타입을 void 가 아니라 FileRequest로 설정
+     * - 이유 : 게시판에서 파일을 삭제 하고 마는게 아니라
+     *         파일의 경로를 추적하여 해당 폴더의 파일을 삭제 하기 위함
+     **************************************************/
+
+    public FileRequest deleteTable(String orFileNm, String subPath) {
+        FileRequest fileRequest = new FileRequest();
+        String uuIdFileNm = tableDao.getOrFileNm(orFileNm);
+
+        String filePath = Paths.get(uploadService, subPath, uuIdFileNm).toString();
+        File targetFile = new File(filePath);
+
+        /*
+        * fileRequest에 set으로 삭제한 파일의 데이터를 넣는 이유는
+        * 1. 삭제한 파일들의 데이터를 확인하기 위해서(삭제된 파일이 어떤 파일이였는지 추적하기 위해)
+        * 2. UI 피드백 제공을 위해 사용(삭제 작업 후, 사용자에게 삭제된파일의 이름을 반환 하여 명확한 피드백 제공)
+        * */
+        fileRequest.setFilePath(filePath);
+        fileRequest.setOrFileName(orFileNm);
+        fileRequest.setCompleted(false);
+
+        //조건 자체에서 파일 삭제를 시도 한다(targetFile.delete() 자체가 파일 삭제를 시도 하는 로직임)
+        if(targetFile.exists() && targetFile.delete()) {
+            fileRequest.setCompleted(true);
+        } else {
+            fileRequest.setCompleted(false);
+            log.error("파일 삭제가 진행되지 않았습니다.:{}",fileRequest.isCompleted());
+        }
+
+        return fileRequest;
     }
 }

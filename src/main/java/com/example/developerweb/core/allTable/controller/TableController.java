@@ -2,6 +2,7 @@ package com.example.developerweb.core.allTable.controller;
 
 import com.example.developerweb.common.dto.FileRequest;
 import com.example.developerweb.common.utils.FileUtil;
+import com.example.developerweb.core.allTable.dao.TableDao;
 import com.example.developerweb.core.allTable.dto.TableDto;
 import com.example.developerweb.core.allTable.service.TableService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ public class TableController {
     TableService tableService;
     @Autowired
     FileUtil fileUtil;
+    @Autowired
+    private TableDao tableDao;
 
     @GetMapping("/table")
     public String table() {
@@ -55,6 +58,7 @@ public class TableController {
         return tableService.registerTable(req, file);
     }
 
+    //detail의 경우 @RequestParam으로 받았어도 된다.
     @ResponseBody
     @PostMapping("/detail")
     public TableDto detailTable(@RequestBody Map<String, Object> reqDs) {
@@ -62,4 +66,13 @@ public class TableController {
         return tableService.getDetail(seq);
     }
 
+    @ResponseBody
+    @PostMapping("/delete")
+    public int deleteTable(@RequestBody Map<String, Object> reqDs) {
+        int seq = Integer.parseInt(reqDs.get("tablesSeq").toString());
+        String orFilename = (String) reqDs.get("orFileName");
+        log.info("seq : {}", seq);
+        log.info("orFilename : {}", orFilename);
+        return tableService.deleteTable(seq, orFilename);
+    }
 }

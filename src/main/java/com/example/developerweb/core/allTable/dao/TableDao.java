@@ -34,4 +34,9 @@ public interface TableDao {
     public TableDto getTableDetail(@Param("tablesSeq") int seq);
 
     public FileRequest getFileDetail(@Param("tablesSeq") int seq);
+
+    //페이지 삭제(폴더 파일 삭제)
+    public int getTableDelete(@Param("tablesSeq") int seq);
+
+    public String getOrFileNm(@Param("orFileName") String orFileNm);
 }

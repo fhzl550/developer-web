@@ -131,13 +131,13 @@ function updateFileName() {
     }
 }
 
-//TODO : 파일 보여주기 안됌 / 이거 해결하기
 function tableDtl(unique) {
     let seq = {
         tablesSeq : unique
     }
 
     doActionAjax('POST', '/tables/detail', seq, function (resDs) {
+        $('#detailSeq').val(resDs.tablesSeq);
         $('#detailName').val(resDs.tablesName);
         $('#detailPosition').val(resDs.tablesPosition);
         $('#detailOffice').val(resDs.tablesOffice);
@@ -148,6 +148,29 @@ function tableDtl(unique) {
     });
 
     $('#detailModal').modal('show');
+}
+
+function deleteBtn() {
+    let data = {
+        tablesSeq : $('#detailSeq').val(),
+        orFileName : $('#detailFile').val()
+    }
+
+    fetch('/tables/delete', {
+        method : 'POST',
+        headers: {
+            'Content-Type': 'application/json'  // JSON 데이터임을 명시
+        },
+        body : JSON.stringify(data)
+    }).then(response => {
+        if(!response.ok) {
+            throw new Error('서버 응답 에러');
+        }
+        return response.json();
+    }).then(data => {
+        console.log('데이터 삭제 성공');
+        location.href = '/tables/table';
+    });
 }
 
 </script>
@@ -705,7 +728,8 @@ function tableDtl(unique) {
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <input type="hidden" class="form-control" id="detailSeq" readonly>
+                    <button type="button" class="btn btn-secondary" id="deleteButton" onclick="deleteBtn()">삭제</button>
                 </div>
             </div>
         </div>

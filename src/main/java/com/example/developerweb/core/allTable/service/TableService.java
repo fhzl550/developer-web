@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,6 @@ public class TableService {
         return tableDao.getTableInsert(tableDto);
     }
 
-    //TODO : [25.01.05]파일 보여주는 부분 확실하게 공부하기 특히 어떻게 가져와서 어떻게 변환 했는지를 중점으로 공부히기
     public TableDto getDetail(int seq) {
         TableDto tableDto = tableDao.getTableDetail(seq);
         FileRequest fileRequest = tableDao.getFileDetail(seq);
@@ -67,5 +67,18 @@ public class TableService {
             tableDto.setFileRequest(fileRequest);
         }
         return tableDto;
+    }
+
+    public int deleteTable(int seq, String orFilename) {
+        FileRequest fileRequest = fileUtil.deleteTable(orFilename, "table");
+        //Dto 파일 성공 여부 : default-false
+        if(!fileRequest.isCompleted()) {
+            throw new RuntimeException("파일 삭제 실패:" + orFilename);
+        }
+        TableDto tableDto = tableDao.getTableDetail(seq);
+        if(tableDto == null) {
+            throw new RuntimeException("삭제할 게시판 글이 존재 하지 않습니다.");
+        }
+        return tableDao.getTableDelete(seq);
     }
 }

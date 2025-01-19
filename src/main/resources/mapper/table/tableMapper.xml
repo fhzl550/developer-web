@@ -79,4 +79,21 @@
             tables_seq = #{tablesSeq}
     </select>
 
+    <select id="getOrFileNm" resultType="String">
+        SELECT
+            file_name
+        FROM
+            developer_web_tables
+        WHERE
+            orfile_name = #{orFileName}
+        LIMIT 1
+    </select>
+
+    <delete id="getTableDelete">
+        delete
+        from
+            developer_web_tables
+        where
+            tables_seq = #{tablesSeq}
+    </delete>
 </mapper>
