@@ -71,8 +71,15 @@ public class TableController {
     public int deleteTable(@RequestBody Map<String, Object> reqDs) {
         int seq = Integer.parseInt(reqDs.get("tablesSeq").toString());
         String orFilename = (String) reqDs.get("orFileName");
-        log.info("seq : {}", seq);
-        log.info("orFilename : {}", orFilename);
         return tableService.deleteTable(seq, orFilename);
     }
+
+    /*
+    * TODO :
+    *  1. 첨부파일 수정 공통 잡고 게시판 수정 작업하기
+    *  2. 로그인, 회원가입, 비밀번호 변경(문자인증 기능 넣기), 이중 로그인 방지, 세션 처리 로그아웃 처리
+    *  3. 소켓 통신으로 메세지 처리(알림 처리 까지)
+    *  4. 익셉션 공통 처리
+    * */
+
 }
