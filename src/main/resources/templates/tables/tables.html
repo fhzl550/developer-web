@@ -33,6 +33,34 @@ $(document).ready(function() {
         var search = $('#searchValue').val();
         loadTableData(1 ,search)
     });
+
+    //수정 클릭 시 읽기 전용 해제
+    $('#editButton').click(function() {
+        // 모든 입력 필드의 readonly 속성을 제거
+        $('#detailModal input').removeAttr('readonly');
+    });
+
+    // readonly 속성이 변경될 때(동적 변경 시) 상태 업데이트
+    $('#updateFile').on('change propertychange', function () {
+        if ($('#updateFile').prop('readonly')) {
+            $('#fileSelectBtn').prop('disabled', true);  // 읽기 전용이면 비활성화
+        } else {
+            $('#fileSelectBtn').prop('disabled', false); // 읽기 전용이 아니면 활성화
+        }
+    });
+
+    // 선택 버튼 클릭 이벤트 (파일 선택 기능)
+    $('#fileSelectBtn').on('click', function () {
+        if (!$(this).prop('disabled')) {
+            $('#updateFile').click();
+        }
+    });
+
+    // 파일이 선택되었을 때 파일명을 표시
+    $('#updateFile').on('change', function() {
+        var fileName = $(this).prop('files')[0] ? $(this).prop('files')[0].name : '';
+        $('#detailFile').val(fileName);
+    });
 });
 
 // 테이블 데이터 로딩 함수
@@ -151,9 +179,12 @@ function tableDtl(unique) {
 }
 
 function deleteBtn() {
+
+    var datailFile = $('#detailFile').val() == null ? '' : $('#detailFile').val()
+
     let data = {
         tablesSeq : $('#detailSeq').val(),
-        orFileName : $('#detailFile').val()
+        orFileName : datailFile
     }
 
     fetch('/tables/delete', {
@@ -171,6 +202,25 @@ function deleteBtn() {
         console.log('데이터 삭제 성공');
         location.href = '/tables/table';
     });
+}
+
+function updateBtn() {
+    var formData = new FormData();
+    var updateFile = $('#updateFile')[0].files[0];
+
+    reqDs = {
+        tablesName: $('#detailName').val(),
+        tablesPosition: $('#detailPosition').val(),
+        tablesOffice: $('#detailOffice').val(),
+        tablesAge: $('#detailAge').val(),
+        tablesStartDate: $('#detailDate').val(),
+        tablesSalary: $('#detailSalary').val(),
+        orFileName : $('#detailFile').val()
+    }
+
+    formData.append("fileRequest", updateFile);
+    formData.append("reqDs", new Blob([JSON.stringify(reqDs)], { type: "application/json" }));
+
 }
 
 </script>
@@ -723,17 +773,34 @@ function deleteBtn() {
                         <input type="text" class="form-control" id="detailSalary" readonly>
                     </div>
                     <div class="form-group">
+                        <label for="updateFile">파일</label>
+                        <div class="input-group">
+                            <!-- 숨겨진 파일 입력 필드 -->
+                            <input type="file" id="updateFile" class="custom-file-input" style="display:none;">
+                            <!-- 파일명 표시 필드 -->
+                            <input type="text" class="form-control" id="detailFile" readonly>
+                            <!-- 선택 버튼 -->
+                            <div class="input-group-append">
+                                <button class="btn btn-primary custom-file-btn" type="button" id="fileSelectBtn">
+                                    선택
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
                         <label for="detailFile">파일</label>
                         <input type="text" class="form-control" id="detailFile" readonly>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" class="form-control" id="detailSeq" readonly>
                     <button type="button" class="btn btn-secondary" id="deleteButton" onclick="deleteBtn()">삭제</button>
+                    <button type="button" class="btn btn-primary" id="editButton" onclick="updateBtn()">수정</button>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- 상세보기 팝업 end -->
 
     <!-- Bootstrap core JavaScript-->

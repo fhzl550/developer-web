@@ -107,4 +107,48 @@ public class FileUtil {
 
         return fileRequest;
     }
+
+    /**************************************************
+     * [메서드 이름]: updateFile
+     * - 역할: 파일 수정 로직처리
+     * - 작성자: Yun Usang
+     * - 작성일: 2025-01-25
+     * - 메모 : 반환 타입을 void 가 아니라 FileRequest로 설정
+     * - 이유 : FileRequest 에 각각의 맞는 DB를 저장해주기 위함
+     **************************************************/
+    public FileRequest updateFile(MultipartFile file, String subPath, String orFileNm) {
+        //경로에 저장되어 있는 변경된 파일명을 가져와서 원본 파일명과 서치 해서 원본 파일명 가져오기
+        String uuidFileNm = tableDao.getOrFileNm(orFileNm);
+        //이미지 업로드 되어 있는 해당 파일 찾기
+        String filePath = Paths.get(uploadService, subPath, uuidFileNm).toString();
+        //파일을 삭제 하기 위해서 File 객체를 사용
+        File targetFile = new File(filePath);
+
+        if(!file.isEmpty()) {
+            //exists 는 파일을 발견하면 true 파일을 찾을 수 없으면 false 반환
+            if(targetFile.exists()) {
+                targetFile.delete();
+            }
+        }
+
+        //Mac 에서 파일의 원본 이름 구하기(윈도우와 맥의 한글 처리 방식이 다름) / 업로드된 파일의 원본 파일명 가져오기
+        String originFilename = Normalizer.normalize(file.getOriginalFilename(), Normalizer.Form.NFC);
+        //업로드 파일명으로 변환 UUID 사용(중복 업로드 방지)
+        String saveFile =uniqueFileName(originFilename);
+
+        try {
+            //mkdirs() : C 디렉토리가 없으면 하위 디렉토리 생성 불가
+            targetFile.getParentFile().mkdirs();
+            file.transferTo(targetFile);
+        } catch (Exception e) {
+            throw new RuntimeException("파일 업로드중 오류가 발생하였습니다.",e);
+        }
+
+        return FileRequest.builder()
+                .orFileName(originFilename)
+                .fileName(saveFile)
+                .filePath(filePath)
+                .fileSize((int) file.getSize())
+                .build();
+    }
 }

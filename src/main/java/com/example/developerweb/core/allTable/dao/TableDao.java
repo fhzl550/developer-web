@@ -38,5 +38,8 @@ public interface TableDao {
     //페이지 삭제(폴더 파일 삭제)
     public int getTableDelete(@Param("tablesSeq") int seq);
 
+    //업로드 파일명에 맞는 원본 파일명 찾기
     public String getOrFileNm(@Param("orFileName") String orFileNm);
+
+    public TableDto getTableUpdate(TableDto tableDto);
 }

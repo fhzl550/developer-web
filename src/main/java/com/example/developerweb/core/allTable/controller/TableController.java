@@ -74,6 +74,14 @@ public class TableController {
         return tableService.deleteTable(seq, orFilename);
     }
 
+    @ResponseBody
+    @PostMapping("/update")
+    public TableDto updateTable(@RequestPart("reqDs") TableDto req,
+                                @RequestPart("fileRequest") MultipartFile file,
+                                @RequestPart("orFileName") String orFilename) {
+        return tableService.updateTable(req, file, orFilename);
+    }
+
     /*
     * TODO :
     *  1. 첨부파일 수정 공통 잡고 게시판 수정 작업하기

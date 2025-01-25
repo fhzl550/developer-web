@@ -81,4 +81,10 @@ public class TableService {
         }
         return tableDao.getTableDelete(seq);
     }
+
+    public TableDto updateTable(TableDto tableDto, MultipartFile file, String orFilename) {
+        FileRequest fileRequest = fileUtil.updateFile(file, "table", orFilename);
+        tableDto.setFileRequest(fileRequest);
+        return tableDao.getTableUpdate(tableDto);
+    }
 }

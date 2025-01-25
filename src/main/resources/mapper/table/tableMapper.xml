@@ -89,11 +89,30 @@
         LIMIT 1
     </select>
 
-    <delete id="getTableDelete">
-        delete
-        from
+    <update id="getTableUpdate" parameterType="com.example.developerweb.core.allTable.dto.TableDto">
+        UPDATE
             developer_web_tables
-        where
+        SET
+            tables_name = #{tablesName},
+            tables_position = #{tablesPosition},
+            tables_office = #{tablesOffice},
+            tables_age = #{tablesAge},
+            tables_start_date = #{tablesStartDate},
+            tables_salary = #{tablesSalary},
+            file_name = #{fileRequest.fileName},
+            file_path = #{fileRequest.filePath},
+            file_size = #{fileRequest.fileSize},
+            orfile_name = #{fileRequest.orFileName}
+        WHERE
+            tables_seq = #{tablesSeq}
+    </update>
+
+    <delete id="getTableDelete">
+        DELETE
+        FROM
+            developer_web_tables
+        WHERE
             tables_seq = #{tablesSeq}
     </delete>
+
 </mapper>
