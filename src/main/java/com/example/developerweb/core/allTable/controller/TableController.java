@@ -30,17 +30,7 @@ public class TableController {
     public String table() {
         return "/tables/tables";
     }
-    /*
-     * <pre>테이블 리스 출력 및 페이징</pre>
-     *
-     * @param tableDto
-     * @param tablesName (검색어)
-     * @param page       (내가 보고 있는 페이지 번호)
-     * @param pageSize   (페이지당 게시물의 수)
-     * @return List<TableDto>
-     * @since 2024.11.17
-     * @author Yun
-     */
+
     @ResponseBody
     @PostMapping("/table")
     public Map<String, Object> getTables (@RequestBody Map<String, Object> req) {
@@ -81,13 +71,4 @@ public class TableController {
                                 @RequestPart("originalFile") String originalFile) {
         return tableService.updateTable(req, file, originalFile);
     }
-
-    /*
-    * TODO :
-    *  1. 첨부파일 수정 공통 잡고 게시판 수정 작업하기
-    *  2. 로그인, 회원가입, 비밀번호 변경(문자인증 기능 넣기), 이중 로그인 방지, 세션 처리 로그아웃 처리
-    *  3. 소켓 통신으로 메세지 처리(알림 처리 까지)
-    *  4. 익셉션 공통 처리
-    * */
-
 }

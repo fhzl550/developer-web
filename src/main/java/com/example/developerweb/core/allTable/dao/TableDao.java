@@ -17,7 +17,7 @@ import java.util.List;
  * ========================================================
  * DATE             AUTHOR              MEMO
  * ---------------------------------------------------------
- * 2024. 10. 18.           YUN                 memo
+ * 2024. 10. 18.           YUN
  */
 @Mapper
 public interface TableDao {

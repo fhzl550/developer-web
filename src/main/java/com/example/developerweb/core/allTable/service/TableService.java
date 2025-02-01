@@ -2,7 +2,6 @@ package com.example.developerweb.core.allTable.service;
 
 import com.example.developerweb.common.dto.FileRequest;
 import com.example.developerweb.common.utils.FileUtil;
-import com.example.developerweb.core.allTable.controller.TableController;
 import com.example.developerweb.core.allTable.dao.TableDao;
 import com.example.developerweb.core.allTable.dto.PageDto;
 import com.example.developerweb.core.allTable.dto.TableDto;
@@ -11,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -24,7 +21,19 @@ public class TableService {
     TableDao tableDao;
     @Autowired
     FileUtil fileUtil;
-
+    
+    /**************************************************
+     * methodName   : getTablesService
+     * @role        : 테이블 리스트 출력 및 페이징
+     * @author      : Yun Usang
+     * @since       : 2025.02.10
+     * @return      : Map<String, Object>
+     * @param       : page(내가 보고 있는 페이지 번호),
+     *                pageSize(페이지당 게시물의 수),
+     *                searchKey(검색어)
+     *
+     * @memo        : Dto 타입을 반환 하지 않고 특정한 데이터만 전달 하기 위해 Map 타입 사용
+     **************************************************/
     public Map<String, Object> getTablesService(int page, int pageSize, String searchKey) {
         /*
          * offset 계산
