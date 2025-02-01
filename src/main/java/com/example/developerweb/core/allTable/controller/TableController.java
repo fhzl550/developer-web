@@ -76,10 +76,10 @@ public class TableController {
 
     @ResponseBody
     @PostMapping("/update")
-    public TableDto updateTable(@RequestPart("reqDs") TableDto req,
+    public int updateTable(@RequestPart("reqDs") TableDto req,
                                 @RequestPart("fileRequest") MultipartFile file,
-                                @RequestPart("orFileName") String orFilename) {
-        return tableService.updateTable(req, file, orFilename);
+                                @RequestPart("originalFile") String originalFile) {
+        return tableService.updateTable(req, file, originalFile);
     }
 
     /*

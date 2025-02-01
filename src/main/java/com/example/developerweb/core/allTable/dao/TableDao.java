@@ -41,5 +41,5 @@ public interface TableDao {
     //업로드 파일명에 맞는 원본 파일명 찾기
     public String getOrFileNm(@Param("orFileName") String orFileNm);
 
-    public TableDto getTableUpdate(TableDto tableDto);
+    public int getTableUpdate(TableDto tableDto);
 }

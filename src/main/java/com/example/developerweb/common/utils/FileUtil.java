@@ -115,10 +115,11 @@ public class FileUtil {
      * - 작성일: 2025-01-25
      * - 메모 : 반환 타입을 void 가 아니라 FileRequest로 설정
      * - 이유 : FileRequest 에 각각의 맞는 DB를 저장해주기 위함
+     * - param : originalFile - 수정하기전에 원본 파일명
      **************************************************/
-    public FileRequest updateFile(MultipartFile file, String subPath, String orFileNm) {
+    public FileRequest updateFile(MultipartFile file, String subPath, String originalFile) {
         //경로에 저장되어 있는 변경된 파일명을 가져와서 원본 파일명과 서치 해서 원본 파일명 가져오기
-        String uuidFileNm = tableDao.getOrFileNm(orFileNm);
+        String uuidFileNm = tableDao.getOrFileNm(originalFile);
         //이미지 업로드 되어 있는 해당 파일 찾기
         String filePath = Paths.get(uploadService, subPath, uuidFileNm).toString();
         //파일을 삭제 하기 위해서 File 객체를 사용
@@ -135,11 +136,13 @@ public class FileUtil {
         String originFilename = Normalizer.normalize(file.getOriginalFilename(), Normalizer.Form.NFC);
         //업로드 파일명으로 변환 UUID 사용(중복 업로드 방지)
         String saveFile =uniqueFileName(originFilename);
-
+        //신규로 업로드한 파일의 업로드 경로를 가져옴
+        String newFilepath = Paths.get(uploadService, subPath, saveFile).toString();
+        File newFile = new File(newFilepath);
         try {
             //mkdirs() : C 디렉토리가 없으면 하위 디렉토리 생성 불가
-            targetFile.getParentFile().mkdirs();
-            file.transferTo(targetFile);
+            newFile.getParentFile().mkdirs();
+            file.transferTo(newFile);
         } catch (Exception e) {
             throw new RuntimeException("파일 업로드중 오류가 발생하였습니다.",e);
         }
@@ -147,7 +150,7 @@ public class FileUtil {
         return FileRequest.builder()
                 .orFileName(originFilename)
                 .fileName(saveFile)
-                .filePath(filePath)
+                .filePath(newFilepath)
                 .fileSize((int) file.getSize())
                 .build();
     }

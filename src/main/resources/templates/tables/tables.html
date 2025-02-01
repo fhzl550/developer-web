@@ -34,10 +34,22 @@ $(document).ready(function() {
         loadTableData(1 ,search)
     });
 
+    let isEditing = false;
+
     //수정 클릭 시 읽기 전용 해제
     $('#editButton').click(function() {
-        // 모든 입력 필드의 readonly 속성을 제거
-        $('#detailModal input').removeAttr('readonly');
+        if (!isEditing) {
+            // 첫 클릭 : 모든 입력 필드의 readonly 속성을 제거
+            $('#detailModal input').removeAttr('readonly');
+            $('#editButton').text('수정 완료');
+            isEditing = true;
+        } else {
+            //두 번째 클릭 : 수정 오나료 로직 실행
+            $('#detailModal input').attr('readonly', true);
+            $('#editButton').text('수정');
+            updateBtn()
+            isEditing = false;
+        }
     });
 
     // readonly 속성이 변경될 때(동적 변경 시) 상태 업데이트
@@ -173,6 +185,7 @@ function tableDtl(unique) {
         $('#detailDate').val(resDs.tablesStartDate.substring(0, 10));// 날짜 형식 처리
         $('#detailSalary').val(resDs.tablesSalary);
         $('#detailFile').val(resDs.fileRequest.orFileName);
+        $('#originalFile').val(resDs.fileRequest.orFileName);
     });
 
     $('#detailModal').modal('show');
@@ -208,23 +221,42 @@ function updateBtn() {
     var formData = new FormData();
     var updateFile = $('#updateFile')[0].files[0];
 
-    reqDs = {
+    var reqDs = {
+        tablesSeq : $('#detailSeq').val(),
         tablesName: $('#detailName').val(),
         tablesPosition: $('#detailPosition').val(),
         tablesOffice: $('#detailOffice').val(),
         tablesAge: $('#detailAge').val(),
         tablesStartDate: $('#detailDate').val(),
-        tablesSalary: $('#detailSalary').val(),
-        orFileName : $('#detailFile').val()
+        tablesSalary: $('#detailSalary').val()
     }
 
     formData.append("fileRequest", updateFile);
+    formData.append("originalFile", $('#originalFile').val());
     formData.append("reqDs", new Blob([JSON.stringify(reqDs)], { type: "application/json" }));
+
+    fetch('/tables/update', {
+       method : 'POST',
+        body : formData
+    }).then(response => {
+        if(!response.ok) {
+            console.log('response:' + JSON.stringify(response));
+            throw new Error("서버 응답 에러");
+        }
+        return response.json();
+    }).then(data => {
+        console.log('수정 성공', data);
+        location.href="/tables/table";
+    }).catch(error => {
+        console.log('수정 실패', error);
+    })
 
 }
 
 </script>
 <body id="page-top">
+<input type="hidden" id="originalFile" value="">
+<input type="hidden" id="updateSeq" value="">
     <div id="wrapper">
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
@@ -795,7 +827,7 @@ function updateBtn() {
                 <div class="modal-footer">
                     <input type="hidden" class="form-control" id="detailSeq" readonly>
                     <button type="button" class="btn btn-secondary" id="deleteButton" onclick="deleteBtn()">삭제</button>
-                    <button type="button" class="btn btn-primary" id="editButton" onclick="updateBtn()">수정</button>
+                    <button type="button" class="btn btn-primary" id="editButton" >수정</button>
                 </div>
             </div>
         </div>
