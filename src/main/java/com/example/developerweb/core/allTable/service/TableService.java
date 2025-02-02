@@ -26,7 +26,7 @@ public class TableService {
      * methodName   : getTablesService
      * @role        : 테이블 리스트 출력 및 페이징
      * @author      : Yun Usang
-     * @since       : 2025.02.10
+     * @since       : 2025.02.01
      * @return      : Map<String, Object>
      * @param       : page(내가 보고 있는 페이지 번호),
      *                pageSize(페이지당 게시물의 수),
@@ -63,12 +63,36 @@ public class TableService {
         return result;
     }
 
+    /**************************************************
+     * methodName   : registerTable
+     * @role        : 테이블 등록
+     * @author      : Yun Usang
+     * @since       : 2025.02.02
+     * @return      : int
+     * @param       : tableDto(내가 등록하는 데이터),
+     *                file(내가 등록하는 파일),
+     *
+     * @memo        : fileUtil 의 파일 등록 공통을 사용
+     *                fileRequest 객체로 변환 후 tableDto 에
+     *                있는 fileRequest 객체에 set하여 DB 등록
+     **************************************************/
     public int registerTable(TableDto tableDto, MultipartFile file) {
         FileRequest fileRequest = fileUtil.uploadFile(file, "table");
         tableDto.setFileRequest(fileRequest);
         return tableDao.getTableInsert(tableDto);
     }
 
+    /**************************************************
+     * methodName   : getDetail
+     * @role        : 테이블 상세보기
+     * @author      : Yun Usang
+     * @since       : 2025.02.02
+     * @return      : TableDto
+     * @param       : seq(상세보기 시퀀스),
+     *
+     * @memo        : 반환 타입을 TableDto 가 아닌 Map 타입으로
+     *                가져왔어도 됬다 파라미터로 seq만 가져오면 되기 때문에
+     **************************************************/
     public TableDto getDetail(int seq) {
         TableDto tableDto = tableDao.getTableDetail(seq);
         FileRequest fileRequest = tableDao.getFileDetail(seq);
@@ -78,6 +102,19 @@ public class TableService {
         return tableDto;
     }
 
+    /**************************************************
+     * methodName   : deleteTable
+     * @role        : 테이블 삭제
+     * @author      : Yun Usang
+     * @since       : 2025.02.02
+     * @return      : int
+     * @param       : seq(삭제를 위한 시퀀스),
+     *                orFilename(파일의 삭제를 위한 파라미터)
+     *
+     * @memo        : fileUtil 에서 삭제여부를 판단하기 위하여
+     *                fileRequest 에 isCompleted 라는 것을 만들어
+     *                성공이면 true 실패이면 false를 반환
+     **************************************************/
     public int deleteTable(int seq, String orFilename) {
         FileRequest fileRequest = fileUtil.deleteTable(orFilename, "table");
         //Dto 파일 성공 여부 : default-false
@@ -91,6 +128,20 @@ public class TableService {
         return tableDao.getTableDelete(seq);
     }
 
+    /**************************************************
+     * methodName   : updateTable
+     * @role        : 테이블 수정
+     * @author      : Yun Usang
+     * @since       : 2025.02.02
+     * @return      : int
+     * @param       : tableDto(테이블 수정에대한 정보),
+     *                file(파일의 수정을 위한 정보),
+     *                originalFile(기존파일 삭제 후 새 파일 등록을 위한 정보)
+     *
+     * @memo        : fileUtil의 updateFile 공통을 사용하여
+     *                파일을 수정 한다. 수정한 파일을 fileRequest 객체로 변환하여
+     *                DB에 등록 할 수 있게 한다.
+     **************************************************/
     public int updateTable(TableDto tableDto, MultipartFile file, String originalFile) {
         FileRequest fileRequest = fileUtil.updateFile(file, "table", originalFile);
         tableDto.setFileRequest(fileRequest);

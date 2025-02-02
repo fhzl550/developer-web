@@ -1,6 +1,5 @@
 package com.example.developerweb.core.allTable.controller;
 
-import com.example.developerweb.common.dto.FileRequest;
 import com.example.developerweb.common.utils.FileUtil;
 import com.example.developerweb.core.allTable.dao.TableDao;
 import com.example.developerweb.core.allTable.dto.TableDto;
@@ -11,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j

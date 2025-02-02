@@ -13,6 +13,18 @@ import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.UUID;
 
+/**
+ * packageName      : com.example.developerweb.common.utils
+ * fileName         : FileUtil
+ * author           : YUN
+ * date             : 2025. 02. 02.
+ * description      :
+ * ========================================================
+ * DATE             MEMO
+ * ---------------------------------------------------------
+ * 2025. 02. 02.    파일 등록,수정,삭제 공통 처리 클래스
+ */
+
 @Slf4j
 @Component
 public class FileUtil {
@@ -34,11 +46,18 @@ public class FileUtil {
         return baseName + "_" + uuId + extension;
     }
 
-    /*
-    * 단일 파일 업로드
-    * @param multipartFile - 파일 객체
-    * @return DB에 저장할 파일 정보
-    */
+    /**************************************************
+     * @methodName   : uploadFile
+     * @role        : 파일 등록을 위한 공통 로직
+     * @author      : Yun Usang
+     * @since       : 2025.02.02
+     * @return      : FileRequest
+     * @param       : file(등록하고자 하는 파일의 정보),
+     *                subPath(중간 폴더 명)
+     *
+     * @memo        : 반환 타입이 FileRequest 인것은 파일 업로드 후
+     *                관련 정보를 담아 반환 하기 위함 이다.
+     **************************************************/
     public FileRequest uploadFile(MultipartFile file, String subPath) {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("업로드된 파일이 없습니다.");
@@ -72,15 +91,19 @@ public class FileUtil {
     }
 
     /**************************************************
-     * [메서드 이름]: deleteTable
-     * - 역할: 파일 삭제 로직 처리
-     * - 작성자: Yun Usang
-     * - 작성일: 2025-01-18
-     * - 메모 : 반환 타입을 void 가 아니라 FileRequest로 설정
-     * - 이유 : 게시판에서 파일을 삭제 하고 마는게 아니라
-     *         파일의 경로를 추적하여 해당 폴더의 파일을 삭제 하기 위함
+     * @methodName   : deleteTable
+     * @role        : 파일 삭제 로직 처리
+     * @author      : Yun Usang
+     * @since       : 2025.02.02
+     * @return      : FileRequest
+     * @param       : orFileNm(원본 파일이름),
+     *                subPath(중간 폴더 명)
+     *
+     * @memo        : 반환 타입을 void 가 아니라 FileRequest로 설정
+     *                게시판에서 파일을 삭제 하고 마는게 아니라
+     *                파일의 경로를 추적하여 해당 폴더의 파일을 삭제 하기 위함
+     *                getOrFileNm 을 통해 폴더에 업로드 되어 있는 파일의 이름을 찾음
      **************************************************/
-
     public FileRequest deleteTable(String orFileNm, String subPath) {
         FileRequest fileRequest = new FileRequest();
         String uuIdFileNm = tableDao.getOrFileNm(orFileNm);
@@ -109,13 +132,17 @@ public class FileUtil {
     }
 
     /**************************************************
-     * [메서드 이름]: updateFile
-     * - 역할: 파일 수정 로직처리
-     * - 작성자: Yun Usang
-     * - 작성일: 2025-01-25
-     * - 메모 : 반환 타입을 void 가 아니라 FileRequest로 설정
-     * - 이유 : FileRequest 에 각각의 맞는 DB를 저장해주기 위함
-     * - param : originalFile - 수정하기전에 원본 파일명
+     * @methodName  : updateFile
+     * @role        : 파일 수정 로직처리
+     * @author      : Yun Usang
+     * @since       : 2025.02.02
+     * @return      : FileRequest
+     * @param       : originalFile(수정하기전에 원본 파일명, 삭제를 위한 파일명),
+     *                subPath(중간 폴더 명),
+     *                file(수정 해서 업로드하는 파일의 정보)
+     *
+     * @memo        : 반환 타입을 void 가 아니라 FileRequest로 설정
+     *                FileRequest 에 각각의 맞는 DB를 저장해주기 위함
      **************************************************/
     public FileRequest updateFile(MultipartFile file, String subPath, String originalFile) {
         //경로에 저장되어 있는 변경된 파일명을 가져와서 원본 파일명과 서치 해서 원본 파일명 가져오기

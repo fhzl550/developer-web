@@ -1,0 +1,31 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.developerweb.core.auth.dto.LoginDto">
+
+    <sql id="signupColumn">
+        user_email,
+        user_password,
+        user_name,
+        user_phone,
+        user_birth_date,
+        user_gender,
+        user_role
+    </sql>
+
+    <insert id="registerUser" parameterType="com.example.developerweb.core.auth.dto.LoginDto">
+        insert into developer_web_login (
+            <include refid="signupColumn"/>
+        ) values (
+            #{userEmail},
+            #{userPassword},
+            #{userName},
+            #{userPhone},
+            #{userBirthdate},
+            #{userGender},
+            #{userRole}
+        )
+    </insert>
+
+</mapper>
