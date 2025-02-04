@@ -12,7 +12,7 @@ public class LoginDto {
     private String userName;
     private String userPhone;
     private Timestamp userBirthdate;
-    private char userGender;
+    private String userGender;
     private String userRole;
 }
 //userRole은 권한이다.
