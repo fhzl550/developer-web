@@ -28,17 +28,17 @@
         event.preventDefault();
 
         var reqDs = {
-            userEmail : $('#userName').val(),
-            userPassword : $('#userEmail').val(),
-            userName : $('#userPhone').val(),
-            userPhone : $('#userBirth').val(),
-            userBirthdate : $('#userPw').val(),
+            userEmail : $('#userEmail').val(),
+            userPassword : $('#userPw').val(),
+            userName : $('#userName').val(),
+            userPhone : $('#userPhone').val(),
+            userBirthdate : $('#userBirth').val(),
             userGender : $("input[name='gender']:checked").val()
         }
 
-        doActionAjax('POST','/com/signup', reqDs, function (response) {
-            if(!response.ok) {
-                console.log('response:' + JSON.stringify(response));
+        doActionAjax('POST','/com/signup', reqDs, function (resDs) {
+            if(resDs) {
+                console.log('response:' + JSON.stringify(resDs));
                 throw new Error('서버 응답 에러');
             } else {
                 Swal.fire({
