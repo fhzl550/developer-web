@@ -14,5 +14,6 @@ public class LoginDto {
     private Timestamp userBirthdate;
     private String userGender;
     private String userRole;
+    private String userSalt;
 }
 //userRole은 권한이다.
