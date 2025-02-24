@@ -25,9 +25,11 @@
     });
 
     function signUp() {
-        event.preventDefault();
+        showCustomAlert("회원가입에 성공했습니다!", function () {
+            window.location.href = '/com/login';
+        });
 
-        var reqDs = {
+        /*var reqDs = {
             userEmail : $('#userEmail').val(),
             userPassword : $('#userPw').val(),
             userName : $('#userName').val(),
@@ -38,28 +40,20 @@
 
         doActionAjax('POST','/com/signup', reqDs, function (resDs) {
             if(resDs) {
-                console.log('response:' + JSON.stringify(resDs));
                 throw new Error('서버 응답 에러');
             } else {
-                Swal.fire({
-                    title: '회원 가입 성공!',
-                    text: '회원 가입이 완료되었습니다.',
-                    icon: 'success',  // success, error, warning, info, question
-                    confirmButtonText: '확인',
-                    confirmButtonColor: '#3085d6',
-                    backdrop: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = '/com/login'; // 로그인 페이지로 이동
-                    }
-                });
+               showCustomAlert("회원가입에 성공했습니다!", function() {
+                    // 성공 시 메인 페이지로 이동
+                    window.location.href = '/com/login'; // 로그인 페이지로 이동
+                }, "성공");
             }
-        });
+        });*/
     }
 </script>
 
 <body class="bg-gradient-primary">
-
+<div th:replace="messageView :: alertFragment"></div>
+<!--<div th:replace="~{messageView :: alertFragment}"></div>-->
 <div class="container">
 
     <div class="card o-hidden border-0 shadow-lg my-5">
@@ -122,17 +116,17 @@
 
 
                             <!-- 회원가입 버튼 -->
-                            <a href="login.html" class="btn btn-primary btn-user btn-block" onclick="signUp()">
+                            <a href="javascript:void(0)" class="btn btn-primary btn-user btn-block" onclick="signUp()">
                                 Register Account
                             </a>
 
                             <hr>
 
                             <!-- 소셜 로그인 -->
-                            <a href="index.html" class="btn btn-google btn-user btn-block">
+                            <a href="" class="btn btn-google btn-user btn-block">
                                 <i class="fab fa-google fa-fw"></i> Register with Google
                             </a>
-                            <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                            <a href="" class="btn btn-facebook btn-user btn-block">
                                 <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
                             </a>
                         </form>
@@ -142,7 +136,7 @@
                             <a class="small" href="forgot-password.html">Forgot Password?</a>
                         </div>
                         <div class="text-center">
-                            <a class="small" href="login.html">Already have an account? Login!</a>
+                            <a class="small" href="/com/login">Already have an account? Login!</a>
                         </div>
                     </div>
                 </div>
@@ -161,7 +155,6 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/js/lib/sb-admin-2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/lib/common.js"></script>
 </body>
 

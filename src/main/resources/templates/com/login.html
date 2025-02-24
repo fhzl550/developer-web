@@ -21,6 +21,15 @@
 
 </head>
 
+<script>
+    $(document).ready(function () {
+        $('#test').click(function () {
+            showCustomAlert("회원가입에 실패했습니다. 다시 시도해주세요.");
+
+        })
+    });
+</script>
+
 <body class="bg-gradient-primary">
 
     <div class="container">
@@ -57,7 +66,7 @@
                                                     Me</label>
                                             </div>
                                         </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                        <a href="" class="btn btn-primary btn-user btn-block" id="test">
                                             Login
                                         </a>
                                         <hr>

@@ -29,7 +29,6 @@ public class LoginController {
     @ResponseBody
     @PostMapping("/signup")
     public int registerUser(@RequestBody LoginDto loginDto) {
-        log.info("loginDto: {}", loginDto);
         return loginService.registerUser(loginDto);
     }
 }

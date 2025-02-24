@@ -19,10 +19,6 @@ public class LoginService {
 
         String hashedPassword = SHA256SaltUtil.hashPassword(password, salt);
 
-        /*
-        * TODO : salt 를 따로 DB 에 저장
-        * 로그인 시 salt 와 해싱된 비밀번호를 함쳐서 비교하고 로그인 시키기
-        * */
         loginDto.setUserSalt(salt);
         loginDto.setUserPassword(hashedPassword);
 
